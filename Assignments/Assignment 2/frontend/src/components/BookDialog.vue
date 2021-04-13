@@ -63,9 +63,7 @@ export default {
       }
     },
     Delete(){
-      api.books.deleteById({
-        id: this.book.id,
-      }).then(() => this.$router.go());
+      api.books.deleteById(this.book.id).then(() => this.$router.go());
     },
   },
 };

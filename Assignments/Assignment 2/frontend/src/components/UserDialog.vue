@@ -57,9 +57,7 @@ export default {
       }
     },
     Delete(){
-      api.users.deleteById({
-        id: this.user.id,
-      }).then(() => this.$router.go());
+      api.users.deleteById(this.user.id).then(() => this.$router.go());
     },
   },
 };

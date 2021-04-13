@@ -8,6 +8,7 @@ import com.assignment.assignment2.bookstore.model.Genre;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -26,10 +27,7 @@ public class BookService {
                 .collect(Collectors.toList());
     }
 
-    public BookDTO findById(Long id) {
-        Optional<BookDTO> result = bookRepository.findById(id).map(bookMapper :: bookToBookDTO);
-        return result.orElse(null);
-    }
+    public BookDTO findById(Long id) { return bookRepository.findById(id).map(bookMapper :: bookToBookDTO) .orElseThrow(() -> new EntityNotFoundException("Book not found: " + id)); }
 
     public void deleteByID(long id) {
         bookRepository.deleteById(id);

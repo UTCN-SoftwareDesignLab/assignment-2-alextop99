@@ -29,6 +29,7 @@ import api from "@/api";
 import UserTable from "@/components/UserTable";
 import BookTable from "@/components/BookTable";
 import Header from "@/components/Header";
+import router from "@/router";
 
 export default {
   name: "Admin",
@@ -46,8 +47,14 @@ export default {
     }
   },
   async created() {
-    this.users = await api.users.getAll();
-    this.books = await api.books.getAll();
+    if(this.$store.state.auth.user.role !== "ADMIN") {
+      await this.$store.dispatch("auth/logout");
+      await router.push("/");
+    }
+    else {
+      this.users = await api.users.getAll();
+      this.books = await api.books.getAll();
+    }
   },
 };
 </script>

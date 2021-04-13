@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import static com.assignment.assignment2.bookstore.BookConstants.BookTableHeader;
 import static com.assignment.assignment2.report.ReportType.PDF;
 
 @Service
@@ -19,6 +20,9 @@ public class PdfReportService implements ReportService {
 
     @Override
     public String export(List<BookDTO> books) {
+        LocalDateTime now = LocalDateTime.now();
+        String filename = dtf.format(now) + ".pdf";
+
         try (PDDocument noStockPDF = new PDDocument()) {
             PDPage page = new PDPage();
             noStockPDF.addPage(page);
@@ -30,7 +34,7 @@ public class PdfReportService implements ReportService {
 
                 cont.newLineAtOffset(25, 700);
 
-                cont.showText("ID, Title, Author, Genre, Price, Stock");
+                cont.showText(String.join(", ", BookTableHeader));
                 cont.newLine();
 
                 for (BookDTO book: books) {
@@ -41,16 +45,13 @@ public class PdfReportService implements ReportService {
                 cont.endText();
             }
 
-            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH-mm-ss");
-            LocalDateTime now = LocalDateTime.now();
-
-            noStockPDF.save(dtf.format(now) + ".pdf");
+            noStockPDF.save(filename);
         } catch (IOException e) {
             e.printStackTrace();
             return "Failed";
         }
 
-        return "Succeeded";
+        return filename;
     }
 
 

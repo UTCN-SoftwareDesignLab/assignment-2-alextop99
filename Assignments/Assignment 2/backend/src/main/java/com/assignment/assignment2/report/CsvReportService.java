@@ -8,29 +8,29 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import static com.assignment.assignment2.bookstore.BookConstants.BookTableHeader;
 import static com.assignment.assignment2.report.ReportType.CSV;
 
 @Service
 public class CsvReportService implements ReportService {
     @Override
     public String export(List<BookDTO> noStockBooks) {
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH-mm-ss");
         LocalDateTime now = LocalDateTime.now();
 
-        File csvFile = new File(dtf.format(now) + ".csv");
+        String filename = dtf.format(now) + ".csv";
+
+        File csvFile = new File(filename);
 
         try {
             FileWriter csvFileOutput = new FileWriter(csvFile);
             CSVWriter csvWriter = new CSVWriter(csvFileOutput);
 
-            String[] header = {"Title", "Author", "Genre", "Price", "Stock"};
-            csvWriter.writeNext(header);
+            csvWriter.writeNext(BookTableHeader);
 
             for(BookDTO book : noStockBooks) {
-                String[] bookToWrite = {book.getTitle(), book.getAuthor(), book.getGenre(), String.valueOf(book.getPrice()), String.valueOf(book.getStock())};
+                String[] bookToWrite = {String.valueOf(book.getId()), book.getTitle(), book.getAuthor(), book.getGenre(), String.valueOf(book.getPrice()), String.valueOf(book.getStock())};
                 csvWriter.writeNext(bookToWrite);
             }
 
@@ -40,7 +40,7 @@ public class CsvReportService implements ReportService {
             return "Failed";
         }
 
-        return "Succeeded";
+        return filename;
     }
 
     @Override

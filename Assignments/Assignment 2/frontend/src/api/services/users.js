@@ -8,7 +8,7 @@ export default {
         });
     },
     deleteById(Id) {
-        return HTTP.post(BASE_URL + "/users/delete", Id, { headers: getToken() }).then((response) => {
+        return HTTP.delete(BASE_URL + "/users/" + Id, { headers: getToken() }).then((response) => {
             return response.data;
         });
     },
@@ -18,7 +18,7 @@ export default {
         });
     },
     update(UserData) {
-        return HTTP.post(BASE_URL + "/users/update", UserData, { headers: getToken() }).then((response) => {
+        return HTTP.patch(BASE_URL + "/users/update", UserData, { headers: getToken() }).then((response) => {
             return response.data;
         });
     }

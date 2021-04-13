@@ -26,10 +26,10 @@ public class UserController {
         return userService.findAll();
     }
 
-    @PostMapping(DELETE)
+    @DeleteMapping(DELETE)
     @Secured({"ADMIN"})
-    public void delete(@Valid @RequestBody DeleteRequest deleteRequest) {
-        userService.deleteByID(deleteRequest.getId());
+    public void delete(@PathVariable Long id) {
+        userService.deleteByID(id);
     }
 
     @PostMapping(SAVE)
@@ -38,7 +38,7 @@ public class UserController {
         userService.save(userDTO);
     }
 
-    @PostMapping(UPDATE)
+    @PatchMapping(UPDATE)
     @Secured({"ADMIN"})
     public void update(@Valid @RequestBody UserDTO userDTO) {
         userService.update(userDTO);
@@ -46,7 +46,7 @@ public class UserController {
 
     @GetMapping(FIND_BY_ID)
     @Secured({"ADMIN"})
-    public UserDTO findById(@RequestParam Long id) {
+    public UserDTO findById(@PathVariable Long id) {
         return userService.findById(id);
     }
 }
