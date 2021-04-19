@@ -1,6 +1,5 @@
 import {BASE_URL, HTTP} from "@/api/http";
-import getToken from "@/api/utils";
-import { saveAs } from 'file-saver';
+import getToken, {saveFile} from "@/api/utils";
 
 export default {
     getAll() {
@@ -11,32 +10,15 @@ export default {
     exportPDF() {
         return HTTP.get(BASE_URL + "/books/report/PDF", { responseType: 'blob', headers: getToken() }).then((response) => {
             if(response.data.size > 0) {
-                let currentdate = new Date();
-                let datetime = currentdate.getDate() + "-"
-                    + (currentdate.getMonth()+1)  + "-"
-                    + currentdate.getFullYear() + " "
-                    + currentdate.getHours() + "-"
-                    + currentdate.getMinutes() + "-"
-                    + currentdate.getSeconds();
-                let blob = new Blob([response.data], {type: "application/pdf"});
-                saveAs(blob, datetime + ".pdf");
+                saveFile("PDF", response);
             }
             return response.data;
         });
     },
     exportCSV() {
-
         return HTTP.get(BASE_URL + "/books/report/CSV", { responseType: 'blob', headers: getToken() }).then((response) => {
             if(response.data.size > 0) {
-                let currentdate = new Date();
-                let datetime = currentdate.getDate() + "-"
-                    + (currentdate.getMonth()+1)  + "-"
-                    + currentdate.getFullYear() + " "
-                    + currentdate.getHours() + "-"
-                    + currentdate.getMinutes() + "-"
-                    + currentdate.getSeconds();
-                let blob = new Blob([response.data], {type: "text/csv;charset=utf-8"});
-                saveAs(blob, datetime + ".csv");
+                saveFile("CSV", response);
             }
             return response.data;
         });
